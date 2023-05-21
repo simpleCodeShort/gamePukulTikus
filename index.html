@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Whack-a-Mole Game</title>
+  <style>
+    body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.title {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #000000;
+}
+
+.game-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-image: url('rumput.jpg');
+}
+
+.score {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #000000;
+  margin-top: 20px;
+}
+
+.mole {
+  width: 80px;
+  height: 80px;
+  background-image: url('mole.png');
+  background-size: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.mole:hover {
+  transform: scale(1.2);
+}
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">game pukul tikus!</h1>
+  <div class="game-area">
+    <div class="mole"></div>
+    <div class="mole"></div>
+    <div class="mole"></div>
+    <div class="mole"></div>
+    <div class="mole"></div>
+    <div class="mole"></div>
+  </div>
+  <div class="score">
+    <p>Skor Kamu: <span id="currentScore">0</span></p>
+    <p>Skor Tertingi: <span id="highScore">0</span></p>
+  </div>
+  <script>
+    const gameArea = document.querySelector('.game-area');
+const currentScoreText = document.getElementById('currentScore');
+const highScoreText = document.getElementById('highScore');
+let currentScore = 0;
+let highScore = 0;
+
+gameArea.addEventListener('click', (event) => {
+  if (event.target.classList.contains('mole')) {
+    event.target.style.display = 'none';
+    currentScore++;
+    currentScoreText.textContent = currentScore;
+
+    if (currentScore > highScore) {
+      highScore = currentScore;
+      highScoreText.textContent = highScore;
+    }
+  }
+});
+
+function randomMole() {
+  const moles = document.querySelectorAll('.mole');
+  const mole = moles[Math.floor(Math.random() * moles.length)];
+  return mole;
+}
+
+function peep() {
+  const mole = randomMole();
+  mole.style.display = 'block';
+
+  setTimeout(() => {
+    mole.style.display = 'none';
+    if (!gameOver) {
+      peep();
+    }
+  }, 1000);
+}
+
+let gameOver = false;
+
+function startGame() {
+  gameOver = false;
+  currentScore = 0;
+  currentScoreText.textContent = currentScore;
+
+  peep();
+
+  setTimeout(() => {
+    gameOver = true;
+    alert('Game Over! Your Score: ' + currentScore);
+  }, 10000);
+}
+
+window.addEventListener('load', startGame);
+  </script>
+</body>
+</html>
